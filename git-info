@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # git-info - shows information about a Git repository a la `svn info'
 #
@@ -233,6 +233,15 @@ do_git_info () {
         sed 's/^/	/' "$TEMPFILE"
     fi
 
+    GIT_DIR="$git_dir" git submodule status > "$TEMPFILE"
+    if [ -s "$TEMPFILE"  ]; then
+        echo "Submodules:"
+        sed 's/^/	/' "$TEMPFILE"
+    else
+    	text="No submodule"
+    	echo "$ID_COLOR$text$RESET_COLOR"
+    fi
+    
     echo "Repository Configuration:"
     git config --local --list | sort | {
         prev_section=
@@ -310,6 +319,8 @@ do_git_info () {
     }
     echo "Last Changed Log:"
     sed 's/^    /	/' "$TEMPFILE"
+
+	(if [[ -n $(git status --porcelain) ]]; then echo "repo is dirty"; fi)
 
     finalize
 }
