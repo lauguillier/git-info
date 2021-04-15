@@ -320,7 +320,7 @@ do_git_info () {
     echo "Last Changed Log:"
     sed 's/^    /	/' "$TEMPFILE"
 
-	text="Repo is dirty"
+	text="Working directory is dirty"
 	(if [[ -n $(git status --porcelain) ]]; then echo "$REMOTE_COLOR$text$RESET_COLOR"; fi)
 
     finalize
